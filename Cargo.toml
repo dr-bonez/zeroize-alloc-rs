@@ -16,7 +16,4 @@ keywords = ["zero", "alloc", "zeroize", "allocator"]
 name = "zeroize_alloc"
 path = "src/lib.rs"
 
-[features]
-leaky = []
-
 [dependencies]

@@ -5,9 +5,7 @@ use core::alloc::{GlobalAlloc, Layout};
 pub struct ZeroizingAllocator<Alloc: GlobalAlloc>(pub Alloc);
 
 unsafe fn zero(ptr: *mut u8, size: usize) {
-    for i in 0..size {
-        core::ptr::write_volatile(ptr.offset(i as isize), 0);
-    }
+    core::ptr::write_bytes(ptr, 0, size);
     core::sync::atomic::compiler_fence(core::sync::atomic::Ordering::SeqCst);
 }
 
@@ -21,7 +19,7 @@ where
 
     unsafe fn dealloc(&self, ptr: *mut u8, layout: Layout) {
         zero(ptr, layout.size());
-        #[cfg(not(feature = "leaky"))]
+        #[cfg(not(test))]
         self.0.dealloc(ptr, layout);
     }
 
@@ -30,7 +28,7 @@ where
     }
 }
 
-#[cfg(all(feature = "leaky", test))]
+#[cfg(test)]
 mod test {
     extern crate std;
     use std::vec::Vec;
