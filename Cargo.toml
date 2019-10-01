@@ -16,4 +16,5 @@ keywords = ["zero", "alloc", "zeroize", "allocator"]
 name = "zeroize_alloc"
 path = "src/lib.rs"
 
-[dependencies]
+[dev-dependencies]
+quickcheck = "0.9.0"

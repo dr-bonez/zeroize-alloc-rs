@@ -40,7 +40,7 @@ mod test {
         super::ZeroizingAllocator(std::alloc::System);
 
     #[test]
-    fn test() {
+    fn test_fixed() {
         let mut a = Vec::with_capacity(2);
         a.push(0xde);
         a.push(0xad);
@@ -52,5 +52,22 @@ mod test {
         assert_eq!(unsafe { ptr1.as_ref() }, Some(&0));
         drop(a);
         assert_eq!(unsafe { ptr2.as_ref() }, Some(&0));
+    }
+
+    quickcheck::quickcheck! {
+        fn prop(v1: Vec<u8>, v2: Vec<u8>) -> bool {
+            let mut v1 = v1;
+            if v1.len() == 0 || v2.len() == 0 {
+                return true;
+            }
+            let ptr1: *const u8 = &v1[0];
+            v1.shrink_to_fit();
+            v1.extend(v2);
+            let ptr2: *const u8 = &v1[0];
+            assert_eq!(unsafe { ptr1.as_ref() }, Some(&0));
+            drop(v1);
+            assert_eq!(unsafe { ptr2.as_ref() }, Some(&0));
+            true
+        }
     }
 }
