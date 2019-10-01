@@ -5,7 +5,9 @@ use core::alloc::{GlobalAlloc, Layout};
 pub struct ZeroizingAllocator<Alloc: GlobalAlloc>(pub Alloc);
 
 unsafe fn zero(ptr: *mut u8, size: usize) {
-    core::ptr::write_bytes(ptr, 0, size);
+    for i in 0..size {
+        core::ptr::write_volatile(ptr.offset(i as isize), 0);
+    }
     core::sync::atomic::compiler_fence(core::sync::atomic::Ordering::SeqCst);
 }
 
