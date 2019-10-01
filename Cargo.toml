@@ -3,7 +3,20 @@ name = "zeroize_alloc"
 version = "0.1.0"
 authors = ["Aiden McClelland <aiden.mcclelland@saltlending.com>"]
 edition = "2018"
+repository = "https://github.com/DR-BoneZ/zeroize-alloc-rs"
+homepage = "https://github.com/DR-BoneZ/zeroize-alloc-rs"
+license = "Apache-2.0"
+readme = "README.md"
+documentation = "http://docs.rs/zeroize_alloc/"
+description = "A zeroizing allocator wrapper."
+keywords = ["zero", "alloc", "zeroize", "allocator"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "zeroize_alloc"
+path = "src/lib.rs"
+
+[features]
+leaky = []
 
 [dependencies]
